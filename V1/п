@@ -1,0 +1,395 @@
+(* Обработка данных Modbus *)
+	IF NOT funcComService.ready THEN
+		cmSettings.Port:=1;(*номер COM-порта*)
+		cmSettings.dwBaudRate:=19200;
+		cmSettings.byParity:=0;
+		cmSettings.dwTimeout:=0;
+		cmSettings.byStopBits:=0;
+		cmSettings.dwBufferSize:=0;
+		cmSettings.dwScan:=0;
+		funcComService(Enable:=TRUE , Settings:=cmSettings , Task:=OPEN_TSK  );
+	END_IF
+
+(*=======================================================================*)
+(*===========Опрос===============*)
+IF funcComService.ready THEN
+	CASE byMbRequest OF
+(* Опрос UZ1 *)
+(*
+Add: 1;
+ctrl: LCL;
+tt: 5.0;
+For: 8n1;
+tbr 19.2;
+*)
+
+0:(*считывает значение состояния плавного пуска*)
+			funcMbReadHoldRegs(
+				Enable:=TRUE ,					(*запустить блок*)
+				Mode:=MB_RTU ,				(*режим передачи*)
+				DevAddr:=1 ,						(*адрес опрашиваемого устройства*)
+				FirstAddr:=256 ,				(*номер регистра*)
+				Quantity:=1,						(*количество регистров*)
+				ComHandle:=cmSettings.Port ,
+				TimeOut:=T#50ms ,				(*таймаут*)
+				Buffer:=Buffer);
+				IF funcMbReadHoldRegs.Complete THEN
+					IF funcMbReadHoldRegs.Exception=0 THEN
+						Status_UZ1:=WORD_TO_INT(BYTE_TO_WORD(Buffer[1]) OR SHL(BYTE_TO_WORD(Buffer[0]),8));
+						IF Status_UZ1.0=1 THEN ATS22_1_p256:=0; (* 0 - остановлен*)
+						ELSIF Status_UZ1.1=1 THEN ATS22_1_p256:=1; (* 1 - запущен*)
+						ELSIF Status_UZ1.2=1 THEN ATS22_1_p256:=2; (* 3 -авария*)
+						ELSIF Status_UZ1.15=1 THEN ATS22_1_p256:=3; (* 2 - плавный запуск или останов *)
+						END_IF
+					byMbRequest:=1;
+					END_IF
+				END_IF
+1: (*считывает проследнюю неисправность *)
+			funcMbReadHoldRegs(
+				Enable:=TRUE ,					(*запустить блок*)
+				Mode:=MB_RTU ,					(*режим передачи*)
+				DevAddr:=1 ,						(*адрес опрашиваемого устройства*)
+				FirstAddr:=279,					(*номер регистра*)
+				Quantity:=1,						(*количество регистров*)
+				ComHandle:=cmSettings.Port ,
+				TimeOut:=T#50ms ,				(*таймаут*)
+				Buffer:=Buffer);
+				IF funcMbReadHoldRegs.Complete THEN
+					IF funcMbReadHoldRegs.Exception=0 THEN
+						ATS22_1_p279:=WORD_TO_INT(BYTE_TO_WORD(BUFFER[1]) OR SHL(BYTE_TO_WORD(BUFFER[0]),8));
+
+						byMbRequest:=2;
+					END_IF
+				END_IF
+
+2: (*считывает Ток фазы А *)
+				funcMbReadHoldRegs(
+				Enable:=TRUE ,					(*запустить блок*)
+				Mode:=MB_RTU ,					(*режим передачи*)
+				DevAddr:=1 ,						(*адрес опрашиваемого устройства*)
+				FirstAddr:=257,					(*номер регистра*)
+				Quantity:=1,						(*количество регистров*)
+				ComHandle:=cmSettings.Port ,
+				TimeOut:=T#50ms ,				(*таймаут*)
+				Buffer:=Buffer);
+				IF funcMbReadHoldRegs.Complete THEN
+					IF funcMbReadHoldRegs.Exception=0 THEN
+					ATS22_1_p257:=WORD_TO_INT(BYTE_TO_WORD(Buffer[1]) OR SHL(BYTE_TO_WORD(Buffer[0]),8));
+
+					byMbRequest:=3;
+					END_IF
+				END_IF
+
+3: (*считывает Ток фазы B *)
+				funcMbReadHoldRegs(
+				Enable:=TRUE ,					(*запустить блок*)
+				Mode:=MB_RTU ,					(*режим передачи*)
+				DevAddr:=1 ,						(*адрес опрашиваемого устройства*)
+				FirstAddr:=258,					(*номер регистра*)
+				Quantity:=1,						(*количество регистров*)
+				ComHandle:=cmSettings.Port ,
+				TimeOut:=T#50ms ,				(*таймаут*)
+				Buffer:=Buffer);
+				IF funcMbReadHoldRegs.Complete THEN
+					IF funcMbReadHoldRegs.Exception=0 THEN
+					ATS22_1_p258:=WORD_TO_INT(BYTE_TO_WORD(Buffer[1]) OR SHL(BYTE_TO_WORD(Buffer[0]),8));
+
+					byMbRequest:=4;
+					END_IF
+				END_IF
+
+4:(*считывает Ток фазы C *)
+				funcMbReadHoldRegs(
+				Enable:=TRUE ,					(*запустить блок*)
+				Mode:=MB_RTU ,					(*режим передачи*)
+				DevAddr:=1 ,						(*адрес опрашиваемого устройства*)
+				FirstAddr:=259,					(*номер регистра*)
+				Quantity:=1,						(*количество регистров*)
+				ComHandle:=cmSettings.Port ,
+				TimeOut:=T#50ms ,				(*таймаут*)
+				Buffer:=Buffer);
+				IF funcMbReadHoldRegs.Complete THEN
+					IF funcMbReadHoldRegs.Exception=0 THEN
+					ATS22_1_p259:=WORD_TO_INT(BYTE_TO_WORD(Buffer[1]) OR SHL(BYTE_TO_WORD(Buffer[0]),8));
+
+					byMbRequest:=5;
+					END_IF
+				END_IF
+
+5:	(*считывает Линейное напряжение *)
+				funcMbReadHoldRegs(
+				Enable:=TRUE ,					(*запустить блок*)
+				Mode:=MB_RTU ,					(*режим передачи*)
+				DevAddr:=1 ,						(*адрес опрашиваемого устройства*)
+				FirstAddr:=260,					(*номер регистра*)
+				Quantity:=1,						(*количество регистров*)
+				ComHandle:=cmSettings.Port ,
+				TimeOut:=T#50ms ,				(*таймаут*)
+				Buffer:=Buffer);
+				IF funcMbReadHoldRegs.Complete THEN
+					IF funcMbReadHoldRegs.Exception=0 THEN
+					ATS22_1_p260:=WORD_TO_INT(BYTE_TO_WORD(Buffer[1]) OR SHL(BYTE_TO_WORD(Buffer[0]),8));
+
+					byMbRequest:=6;
+					END_IF
+				END_IF
+
+6:	IF ATS22_1_p84 THEN (*перевод в управление по МВ*)
+
+		funcMbWriteSngReg(
+				Enable:=TRUE ,					(*запустить блок*)
+				Mode:=MB_RTU ,					(*режим передачи*)
+				DevAddr:=1 ,						(*адрес опрашиваемого устройства*)
+				REGAddr:=84,					(*номер регистра*)
+				Value:=1,						 (* Если 1 то управление по modbus *)
+				ComHandle:=cmSettings.Port ,
+				TimeOut:=T#20ms);
+				IF funcMbWriteSngReg.Complete THEN
+					byMbRequest:=7;
+				END_IF
+	ELSE
+		funcMbWriteSngReg(
+				Enable:=TRUE ,					(*запустить блок*)
+				Mode:=MB_RTU ,					(*режим передачи*)
+				DevAddr:=1 ,						(*адрес опрашиваемого устройства*)
+				REGAddr:=84,					(*номер регистра*)
+				Value:=0,						 (* Если 1 то управление по modbus *)
+				ComHandle:=cmSettings.Port ,
+				TimeOut:=T#20ms);
+				IF funcMbWriteSngReg.Complete THEN
+					byMbRequest:=7;
+				END_IF
+	END_IF
+
+7: (*Сброс Аварии ATS22 №1*)
+	IF ATS22_1_p752b3 THEN
+		funcMbWriteSngReg(
+				Enable:=TRUE ,					(*запустить блок*)
+				Mode:=MB_RTU ,					(*режим передачи*)
+				DevAddr:=1 ,						(*адрес опрашиваемого устройства*)
+				REGAddr:=752,					(*номер регистра*)
+				Value:=8,						 (* Если 1 то управление по modbus *)
+				ComHandle:=cmSettings.Port ,
+				TimeOut:=T#20ms);
+				IF funcMbWriteSngReg.Complete THEN
+					byMbRequest:=8;
+				END_IF
+	END_IF
+
+(*=======================================================================*)
+(* Опрос UZ2 *)
+(*
+Add: 2;
+ctrl: LCL;
+tt: 5.0;
+For: 8n1;
+tbr 19.2;
+*)
+
+8:(*считывает значение состояния плавного пуска*)
+			funcMbReadHoldRegs(
+				Enable:=TRUE ,					(*запустить блок*)
+				Mode:=MB_RTU ,				(*режим передачи*)
+				DevAddr:=2 ,						(*адрес опрашиваемого устройства*)
+				FirstAddr:=256 ,				(*номер регистра*)
+				Quantity:=1,						(*количество регистров*)
+				ComHandle:=cmSettings.Port ,
+				TimeOut:=T#50ms ,				(*таймаут*)
+				Buffer:=Buffer);
+				IF funcMbReadHoldRegs.Complete THEN
+					IF funcMbReadHoldRegs.Exception=0 THEN
+						Status_UZ2:=WORD_TO_INT(BYTE_TO_WORD(Buffer[1]) OR SHL(BYTE_TO_WORD(Buffer[0]),8));
+						IF Status_UZ2.0=1 THEN ATS22_2_p256:=0; (* 0 - остановлен*)
+						ELSIF Status_UZ2.1=1 THEN ATS22_2_p256:=1; (* 1 - запущен*)
+						ELSIF Status_UZ2.2=1 THEN ATS22_2_p256:=2; (* 3 -авария*)
+						ELSIF Status_UZ2.15=1 THEN ATS22_2_p256:=3; (* 2 - плавный запуск или останов *)
+						END_IF
+					byMbRequest:=9;
+					END_IF
+				END_IF
+9: (*считывает проследнюю неисправность *)
+			funcMbReadHoldRegs(
+				Enable:=TRUE ,					(*запустить блок*)
+				Mode:=MB_RTU ,					(*режим передачи*)
+				DevAddr:=2 ,						(*адрес опрашиваемого устройства*)
+				FirstAddr:=279,					(*номер регистра*)
+				Quantity:=1,						(*количество регистров*)
+				ComHandle:=cmSettings.Port ,
+				TimeOut:=T#50ms ,				(*таймаут*)
+				Buffer:=Buffer);
+				IF funcMbReadHoldRegs.Complete THEN
+					IF funcMbReadHoldRegs.Exception=0 THEN
+						ATS22_2_p279:=WORD_TO_INT(BYTE_TO_WORD(BUFFER[1]) OR SHL(BYTE_TO_WORD(BUFFER[0]),8));
+
+						byMbRequest:=10;
+					END_IF
+				END_IF
+
+10: (*считывает Ток фазы А *)
+				funcMbReadHoldRegs(
+				Enable:=TRUE ,					(*запустить блок*)
+				Mode:=MB_RTU ,					(*режим передачи*)
+				DevAddr:=2 ,						(*адрес опрашиваемого устройства*)
+				FirstAddr:=257,					(*номер регистра*)
+				Quantity:=1,						(*количество регистров*)
+				ComHandle:=cmSettings.Port ,
+				TimeOut:=T#50ms ,				(*таймаут*)
+				Buffer:=Buffer);
+				IF funcMbReadHoldRegs.Complete THEN
+					IF funcMbReadHoldRegs.Exception=0 THEN
+					ATS22_2_p257:=WORD_TO_INT(BYTE_TO_WORD(Buffer[1]) OR SHL(BYTE_TO_WORD(Buffer[0]),8));
+
+					byMbRequest:=11;
+					END_IF
+				END_IF
+
+11: (*считывает Ток фазы B *)
+				funcMbReadHoldRegs(
+				Enable:=TRUE ,					(*запустить блок*)
+				Mode:=MB_RTU ,					(*режим передачи*)
+				DevAddr:=2 ,						(*адрес опрашиваемого устройства*)
+				FirstAddr:=258,					(*номер регистра*)
+				Quantity:=1,						(*количество регистров*)
+				ComHandle:=cmSettings.Port ,
+				TimeOut:=T#50ms ,				(*таймаут*)
+				Buffer:=Buffer);
+				IF funcMbReadHoldRegs.Complete THEN
+					IF funcMbReadHoldRegs.Exception=0 THEN
+					ATS22_2_p258:=WORD_TO_INT(BYTE_TO_WORD(Buffer[1]) OR SHL(BYTE_TO_WORD(Buffer[0]),8));
+
+					byMbRequest:=12;
+					END_IF
+				END_IF
+
+12:(*считывает Ток фазы C *)
+				funcMbReadHoldRegs(
+				Enable:=TRUE ,					(*запустить блок*)
+				Mode:=MB_RTU ,					(*режим передачи*)
+				DevAddr:=2 ,						(*адрес опрашиваемого устройства*)
+				FirstAddr:=259,					(*номер регистра*)
+				Quantity:=1,						(*количество регистров*)
+				ComHandle:=cmSettings.Port ,
+				TimeOut:=T#50ms ,				(*таймаут*)
+				Buffer:=Buffer);
+				IF funcMbReadHoldRegs.Complete THEN
+					IF funcMbReadHoldRegs.Exception=0 THEN
+					ATS22_2_p259:=WORD_TO_INT(BYTE_TO_WORD(Buffer[1]) OR SHL(BYTE_TO_WORD(Buffer[0]),8));
+
+					byMbRequest:=13;
+					END_IF
+				END_IF
+
+13:	(*считывает Линейное напряжение *)
+				funcMbReadHoldRegs(
+				Enable:=TRUE ,					(*запустить блок*)
+				Mode:=MB_RTU ,					(*режим передачи*)
+				DevAddr:=2 ,						(*адрес опрашиваемого устройства*)
+				FirstAddr:=260,					(*номер регистра*)
+				Quantity:=1,						(*количество регистров*)
+				ComHandle:=cmSettings.Port ,
+				TimeOut:=T#50ms ,				(*таймаут*)
+				Buffer:=Buffer);
+				IF funcMbReadHoldRegs.Complete THEN
+					IF funcMbReadHoldRegs.Exception=0 THEN
+					ATS22_2_p260:=WORD_TO_INT(BYTE_TO_WORD(Buffer[1]) OR SHL(BYTE_TO_WORD(Buffer[0]),8));
+
+					byMbRequest:=14;
+					END_IF
+				END_IF
+
+14:	IF ATS22_2_p84 THEN (*перевод в управление по МВ*)
+
+		funcMbWriteSngReg(
+				Enable:=TRUE ,					(*запустить блок*)
+				Mode:=MB_RTU ,					(*режим передачи*)
+				DevAddr:=2 ,						(*адрес опрашиваемого устройства*)
+				REGAddr:=84,					(*номер регистра*)
+				Value:=1,						 (* Если 1 то управление по modbus *)
+				ComHandle:=cmSettings.Port ,
+				TimeOut:=T#20ms);
+				IF funcMbWriteSngReg.Complete THEN
+					byMbRequest:=15;
+				END_IF
+	ELSE
+		funcMbWriteSngReg(
+				Enable:=TRUE ,					(*запустить блок*)
+				Mode:=MB_RTU ,					(*режим передачи*)
+				DevAddr:=2 ,						(*адрес опрашиваемого устройства*)
+				REGAddr:=84,					(*номер регистра*)
+				Value:=0,						 (* Если 1 то управление по modbus *)
+				ComHandle:=cmSettings.Port ,
+				TimeOut:=T#20ms);
+				IF funcMbWriteSngReg.Complete THEN
+					byMbRequest:=15;
+				END_IF
+	END_IF
+
+15: (*Сброс Аварии ATS22 №2*)
+	IF ATS22_2_p752b3 THEN
+		funcMbWriteSngReg(
+				Enable:=TRUE ,					(*запустить блок*)
+				Mode:=MB_RTU ,					(*режим передачи*)
+				DevAddr:=2 ,						(*адрес опрашиваемого устройства*)
+				REGAddr:=752,					(*номер регистра*)
+				Value:=8,						 (* Если 1 то управление по modbus *)
+				ComHandle:=cmSettings.Port ,
+				TimeOut:=T#20ms);
+				IF funcMbWriteSngReg.Complete THEN
+					byMbRequest:=16;
+				END_IF
+	END_IF
+(*=======================================================================*)
+(* Опрос УБЗ-302 №1 *)
+(*
+Add: 3;
+tt: 5.0;
+For: 8n1;
+tbr 19.2;
+*)
+16: (* читаем регистры 100....103*)
+		funcMbReadHoldRegs(
+				Enable:=TRUE ,					(*запустить блок*)
+				Mode:=MB_RTU ,					(*режим передачи*)
+				DevAddr:=3 ,						(*адрес опрашиваемого устройства*)
+				FirstAddr:=100,					(*номер регистра*)
+				Quantity:=4,						(*количество регистров*)
+				ComHandle:=cmSettings.Port ,
+				TimeOut:=T#50ms ,				(*таймаут*)
+				Buffer:=Buffer);
+				IF funcMbReadHoldRegs.Complete THEN
+					IF funcMbReadHoldRegs.Exception=0 THEN
+						ubz_1_p100:=WORD_TO_INT(BYTE_TO_WORD(BUFFER[1]) OR SHL(BYTE_TO_WORD(BUFFER[0]),8));
+						ubz_1_p101:=WORD_TO_INT(BYTE_TO_WORD(BUFFER[3]) OR SHL(BYTE_TO_WORD(BUFFER[2]),8));
+						ubz_1_p102:=WORD_TO_INT(BYTE_TO_WORD(BUFFER[5]) OR SHL(BYTE_TO_WORD(BUFFER[4]),8));
+						ubz_1_p103:=WORD_TO_INT(BYTE_TO_WORD(BUFFER[7]) OR SHL(BYTE_TO_WORD(BUFFER[6]),8));
+					byMbRequest:=17;
+					END_IF
+				END_IF
+
+17: (* читаем регистры 113....122*)
+		funcMbReadHoldRegs(
+				Enable:=TRUE ,					(*запустить блок*)
+				Mode:=MB_RTU ,					(*режим передачи*)
+				DevAddr:=3 ,						(*адрес опрашиваемого устройства*)
+				FirstAddr:=100,					(*номер регистра*)
+				Quantity:=4,						(*количество регистров*)
+				ComHandle:=cmSettings.Port ,
+				TimeOut:=T#50ms ,				(*таймаут*)
+				Buffer:=Buffer);
+				IF funcMbReadHoldRegs.Complete THEN
+					IF funcMbReadHoldRegs.Exception=0 THEN
+						ubz_1_p113:=WORD_TO_INT(BYTE_TO_WORD(BUFFER[1]) OR SHL(BYTE_TO_WORD(BUFFER[0]),8));
+						ubz_1_p114:=WORD_TO_INT(BYTE_TO_WORD(BUFFER[3]) OR SHL(BYTE_TO_WORD(BUFFER[2]),8));
+						ubz_1_p115:=WORD_TO_INT(BYTE_TO_WORD(BUFFER[5]) OR SHL(BYTE_TO_WORD(BUFFER[4]),8));
+						ubz_1_p116:=WORD_TO_INT(BYTE_TO_WORD(BUFFER[7]) OR SHL(BYTE_TO_WORD(BUFFER[6]),8));
+						ubz_1_p117:=WORD_TO_INT(BYTE_TO_WORD(BUFFER[9]) OR SHL(BYTE_TO_WORD(BUFFER[8]),8));
+						ubz_1_p118:=WORD_TO_INT(BYTE_TO_WORD(BUFFER[11]) OR SHL(BYTE_TO_WORD(BUFFER[10]),8));
+						ubz_1_p119:=WORD_TO_INT(BYTE_TO_WORD(BUFFER[13]) OR SHL(BYTE_TO_WORD(BUFFER[12]),8));
+						ubz_1_p120:=WORD_TO_INT(BYTE_TO_WORD(BUFFER[15]) OR SHL(BYTE_TO_WORD(BUFFER[14]),8));
+						ubz_1_p121:=WORD_TO_INT(BYTE_TO_WORD(BUFFER[17]) OR SHL(BYTE_TO_WORD(BUFFER[16]),8));
+						ubz_1_p122:=WORD_TO_INT(BYTE_TO_WORD(BUFFER[19]) OR SHL(BYTE_TO_WORD(BUFFER[20]),8));
+					byMbRequest:=18;
+					END_IF
+				END_IF
+	END_CASE
+END_IF
