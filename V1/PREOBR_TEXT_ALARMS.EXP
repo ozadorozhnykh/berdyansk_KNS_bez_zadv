@@ -1,0 +1,122 @@
+
+(* @NESTEDCOMMENTS := 'Yes' *)
+(* @PATH := '' *)
+(* @OBJECTFLAGS := '0, 8' *)
+(* @SYMFILEFLAGS := '2048' *)
+PROGRAM PREOBR_TEXT_ALARMS
+VAR
+END_VAR
+(* @END_DECLARATION := '0' *)
+(*Расшифровка аварийных сообщений*)
+IF alarms_nomer[nomer_avarii_ekran]=1 THEN alarm_soobshenie:='  Датчик нижнего уровня неисправен. Управление ведется по верхнему и верхнемоу аварийному уровням'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=2 THEN alarm_soobshenie:='  Датчик среднего уровня неисправен. Управление ведется по верхнему и верхнемоу аварийному уровням'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=3 THEN alarm_soobshenie:='  Не сработал контактор пл. пуска Н-1'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=4 THEN alarm_soobshenie:='  Не сработал контактор прям. пуска Н-1'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=5 THEN alarm_soobshenie:='  Не сработал контактор пл. пуска Н-2'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=6 THEN alarm_soobshenie:='  Не сработал контактор прям. пуска Н-2'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=7 THEN alarm_soobshenie:='  Нет связи с плавным пуском. Управление переведено прямым пуском'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=8 THEN alarm_soobshenie:='  Датчик верхнего уровня неисправен'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=9 THEN alarm_soobshenie:='  Перелив'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=10 THEN alarm_soobshenie:='  Насос №1. Низкий ток прямого пуска или неправильное подключение'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=11 THEN alarm_soobshenie:='  Насос №2. Низкий ток прямого пуска или неправильное подключение'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=12 THEN alarm_soobshenie:='  Нажата кнопка аварийного останова'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=13 THEN alarm_soobshenie:='  Насос №1. miniCAS'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=14 THEN alarm_soobshenie:='  Насос №2. miniCAS'; END_IF
+
+IF alarms_nomer[nomer_avarii_ekran]=101 THEN alarm_soobshenie:=' Насос №1. Недогрузка по току'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=102 THEN alarm_soobshenie:=' Насос №1. Перегрузка по току'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=103 THEN alarm_soobshenie:=' Насос №1. Асимметрия фаз. Управление переведено прямым пуском'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=104 THEN alarm_soobshenie:=' Насос №1. Отключение по току утечки. Управление переведено прямым пуском'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=105 THEN alarm_soobshenie:=' Насос №1. Перегрузка электродвигателя. Управление переведено прямым пуском'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=106 THEN alarm_soobshenie:=' Насос №1. Перегрев электродвигателя. Управление переведено прямым пуском'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=107 THEN alarm_soobshenie:=' Насос №1. Перегрев электродвигателя (РТС). Управление переведено прямым пуском'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=108 THEN alarm_soobshenie:=' Насос №1. Чередование фаз. Управление переведено прямым пуском'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=109 THEN alarm_soobshenie:=' Насос №1. Обрыв фазы. Управление переведено прямым пуском'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=110 THEN alarm_soobshenie:=' Насос №1. Низкое напряжение или его отсутствие. Управление переведено прямым пуском'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=111 THEN alarm_soobshenie:=' Насос №1. Высокое напряжение. Управление переведено прямым пуском'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=112 THEN alarm_soobshenie:=' Насос №1. Ошибка несоответствия времени пуска. Управление переведено прямым пуском'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=113 THEN alarm_soobshenie:=' Насос №1. Слишком большое число пусков. Управление переведено прямым пуском'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=114 THEN alarm_soobshenie:=' Насос №1. Замыкание тиристоров или неправильное подключение. Управление переведено прямым пуском'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=115 THEN alarm_soobshenie:=' Насос №1. Внешняя неисправность. Управление переведено прямым пуском'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=116 THEN alarm_soobshenie:=' Насос №1. Внутренняя неисправность. Управление переведено прямым пуском'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=117 THEN alarm_soobshenie:=' Насос №1. Тайм-аут Modbus. Управление переведено прямым пуском'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=118 THEN alarm_soobshenie:=' Насос №1. Код прерывания. Управление переведено прямым пуском'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=119 THEN alarm_soobshenie:=' Насос №1. Короткое замыкание. Управление переведено прямым пуском'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=120 THEN alarm_soobshenie:=' Насос №1. Неисправность байпасного контактора. Управление переведено прямым пуском'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=121 THEN alarm_soobshenie:=' Насос №1. Некорректная конфигурация. Управление переведено прямым пуском'; END_IF
+
+
+
+IF alarms_nomer[nomer_avarii_ekran]=201 THEN alarm_soobshenie:=' Насос №2. Недогрузка по току'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=202 THEN alarm_soobshenie:=' Насос №2. Перегрузка по току'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=203 THEN alarm_soobshenie:=' Насос №2. Асимметрия фаз. Управление переведено прямым пуском'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=204 THEN alarm_soobshenie:=' Насос №2. Отключение по току утечки. Управление переведено прямым пуском'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=205 THEN alarm_soobshenie:=' Насос №2. Перегрузка электродвигателя. Управление переведено прямым пуском'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=206 THEN alarm_soobshenie:=' Насос №2. Перегрев электродвигателя. Управление переведено прямым пуском'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=207 THEN alarm_soobshenie:=' Насос №2. Перегрев электродвигателя (РТС). Управление переведено прямым пуском'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=208 THEN alarm_soobshenie:=' Насос №2. Чередование фаз. Управление переведено прямым пуском'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=209 THEN alarm_soobshenie:=' Насос №2. Обрыв фазы. Управление переведено прямым пуском'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=210 THEN alarm_soobshenie:=' Насос №2. Низкое напряжение или его отсутствие. Управление переведено прямым пуском'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=211 THEN alarm_soobshenie:=' Насос №2. Высокое напряжение. Управление переведено прямым пуском'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=212 THEN alarm_soobshenie:=' Насос №2. Ошибка несоответствия времени пуска. Управление переведено прямым пуском'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=213 THEN alarm_soobshenie:=' Насос №2. Слишком большое число пусков. Управление переведено прямым пуском'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=214 THEN alarm_soobshenie:=' Насос №2. Замыкание тиристоров или неправильное подключение. Управление переведено прямым пуском'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=215 THEN alarm_soobshenie:=' Насос №2. Внешняя неисправность. Управление переведено прямым пуском'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=216 THEN alarm_soobshenie:=' Насос №2. Внутренняя неисправность. Управление переведено прямым пуском'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=217 THEN alarm_soobshenie:=' Насос №2. Тайм-аут Modbus. Управление переведено прямым пуском'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=218 THEN alarm_soobshenie:=' Насос №2. Код прерывания. Управление переведено прямым пуском'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=219 THEN alarm_soobshenie:=' Насос №2. Короткое замыкание. Управление переведено прямым пуском'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=220 THEN alarm_soobshenie:=' Насос №2. Неисправность байпасного контактора. Управление переведено прямым пуском'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=221 THEN alarm_soobshenie:=' Насос №2. Некорректная конфигурация. Управление переведено прямым пуском'; END_IF
+
+
+IF alarms_nomer[nomer_avarii_ekran]=300 THEN alarm_soobshenie:=' УБЗ-1. Максимальная токовая в фазах'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=301 THEN alarm_soobshenie:=' УБЗ-1. Тепловая перегрузка'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=302 THEN alarm_soobshenie:=' УБЗ-1. Замыкание на землю (по току прямой последовательности)'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=303 THEN alarm_soobshenie:=' УБЗ-1. Превышение кратности обратной последовательности по току'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=304 THEN alarm_soobshenie:=' УБЗ-1. Превышение тока обратной последовательности по току'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=305 THEN alarm_soobshenie:=' УБЗ-1. Минимальная токовая в фазах'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=306 THEN alarm_soobshenie:=' УБЗ-1. Затянутый пуск'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=307 THEN alarm_soobshenie:=' УБЗ-1. Блокировка ротора'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=308 THEN alarm_soobshenie:=' УБЗ-1. Достигнут порог температуры первого датчика'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=309 THEN alarm_soobshenie:=' УБЗ-1. Достигнут порог температуры второго датчиках'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=310 THEN alarm_soobshenie:=' УБЗ-1. Нарушение порядка чредования фаз'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=311 THEN alarm_soobshenie:=' УБЗ-1. Внешний МП (есть токи при отключенном реле нагрузки)'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=312 THEN alarm_soobshenie:=' УБЗ-1. Минимальное линейное напряжение'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=313 THEN alarm_soobshenie:=' УБЗ-1. Максимальное линейное напряжение'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=314 THEN alarm_soobshenie:=' УБЗ-1. Перекос фаз'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=315 THEN alarm_soobshenie:=' УБЗ-1. Минимальное сопротивление обмоток двигателя'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=316 THEN alarm_soobshenie:=' УБЗ-1. Минимальная частота сети'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=317 THEN alarm_soobshenie:=' УБЗ-1. Максимальная частота сети'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=318 THEN alarm_soobshenie:=' УБЗ-1. Обрыв фазы'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=319 THEN alarm_soobshenie:=' УБЗ-1. Разрушение EEPROM'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=320 THEN alarm_soobshenie:=' УБЗ-1. Нарушение калибровки'; END_IF
+
+IF alarms_nomer[nomer_avarii_ekran]=400 THEN alarm_soobshenie:=' УБЗ-2. Максимальная токовая в фазах'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=401 THEN alarm_soobshenie:=' УБЗ-2. Тепловая перегрузка'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=402 THEN alarm_soobshenie:=' УБЗ-2. Замыкание на землю (по току прямой последовательности)'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=403 THEN alarm_soobshenie:=' УБЗ-2. Превышение кратности обратной последовательности по току'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=404 THEN alarm_soobshenie:=' УБЗ-2. Превышение тока обратной последовательности по току'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=405 THEN alarm_soobshenie:=' УБЗ-2. Минимальная токовая в фазах'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=406 THEN alarm_soobshenie:=' УБЗ-2. Затянутый пуск'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=407 THEN alarm_soobshenie:=' УБЗ-2. Блокировка ротора'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=408 THEN alarm_soobshenie:=' УБЗ-2. Достигнут порог температуры первого датчика'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=409 THEN alarm_soobshenie:=' УБЗ-2. Достигнут порог температуры второго датчиках'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=410 THEN alarm_soobshenie:=' УБЗ-2. Нарушение порядка чредования фаз'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=411 THEN alarm_soobshenie:=' УБЗ-2. Внешний МП (есть токи при отключенном реле нагрузки)'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=412 THEN alarm_soobshenie:=' УБЗ-2. Минимальное линейное напряжение'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=413 THEN alarm_soobshenie:=' УБЗ-2. Максимальное линейное напряжение'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=414 THEN alarm_soobshenie:=' УБЗ-2. Перекос фаз'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=415 THEN alarm_soobshenie:=' УБЗ-2. Минимальное сопротивление обмоток двигателя'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=416 THEN alarm_soobshenie:=' УБЗ-2. Минимальная частота сети'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=417 THEN alarm_soobshenie:=' УБЗ-2. Максимальная частота сети'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=418 THEN alarm_soobshenie:=' УБЗ-2. Обрыв фазы'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=419 THEN alarm_soobshenie:=' УБЗ-2. Разрушение EEPROM'; END_IF
+IF alarms_nomer[nomer_avarii_ekran]=420 THEN alarm_soobshenie:=' УБЗ-2. Нарушение калибровки'; END_IF
+
+
+
+
+
+
+END_PROGRAM
